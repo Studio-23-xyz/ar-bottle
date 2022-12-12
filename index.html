@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <script src="https://aframe.io/releases/1.2.0/aframe.min.js"></script>
+    <script src="https://libs.zappar.com/zappar-aframe/2.0.0/zappar-aframe.js"></script>
+
+    <!-- We need A-Frame Extras to run animations -->
+    <script src="https://cdn.jsdelivr.net/gh/donmccurdy/aframe-extras@v6.1.0/dist/aframe-extras.min.js"></script>
+
+
+    <meta charset="utf-8" />
+
+
+
+</head>
+
+<body>
+
+    <body>
+        <a-scene>
+            <a-assets>
+                <a-asset-item id="textWithAnimationAssets" src="./assets/animation.glb"></a-asset-item>
+                <a-asset-item id="textWithOutAnimationAssets" src="./assets/still.glb"></a-asset-item>
+              </a-assets>
+            <!-- Ask user for camera permissions, display some text if permission is denied -->
+            <a-entity zappar-permissions-ui id="permissions"></a-entity>
+            <!-- shows a full-page dialog that informs the user they're using an unsupported browser -->
+            <a-entity zappar-compatibility-ui id="compatibility"></a-entity>
+
+            <a-camera zappar-camera>
+                <!-- Inside our camera, include a raycaster that looks down the center of the camera -->
+                <!-- Use our 'collider-check' component to register the event handler -->
+                <a-entity collider-check raycaster="objects: .collidable"></a-entity>
+            </a-camera>
+
+            <a-entity zappar-image="target: assets/ttq.zpt" id="my-image-tracker">
+
+                <!-- Have a hotspot plane that can be detected by the raycaster -->
+
+          
+                <a-entity>
+                    <a-gltf-model id="textWithAnimation" rotation="30 1 0 " position="0 0 0" scale="4 4 4"
+                      src="#textWithAnimationAssets" />
+                  </a-entity>
+                  <a-entity>
+                    <a-gltf-model id="textWithOutAnimation" rotation="30 1 0 " position="0 0 -111" scale="4 4 4"
+                      src="#textWithOutAnimationAssets" animation-mixer />
+                  </a-entity>
+          
+
+
+            </a-entity>
+
+
+        </a-scene>
+    </body>
+    <script>
+
+        let myImageTracker = document.getElementById("my-image-tracker");
+        let animation1 = true
+        const animation = () => {
+           
+          
+      document
+        .getElementById("textWithAnimation")
+        .setAttribute("animation-mixer", {
+          timeScale: 1,
+        });
+      document
+        .querySelector("#textWithAnimation")
+        .setAttribute(
+          "animation",
+          "property: position; to: 0 0 1111;dur: 10; easing: linear; loop: 1; delay:5500"
+        );
+      document
+        .querySelector("#textWithOutAnimation")
+        .setAttribute(
+          "animation",
+          "property: position; to: 0 0 0;dur: 10; easing: linear; loop: 1; delay:5500"
+        );
+
+
+        }
+
+        myImageTracker.addEventListener("zappar-visible", () => {
+            animation()
+        });
+
+        myImageTracker.addEventListener("zappar-notvisible", () => {
+
+        });
+
+    </script>
+
+</body>
+
+</html>
